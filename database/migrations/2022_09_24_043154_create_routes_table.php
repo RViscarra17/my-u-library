@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('uri');
             $table->string('icon');
-            $table->int('order');
+            $table->integer('order');
             $table->timestamps();
         });
     }
