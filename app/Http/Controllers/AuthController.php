@@ -38,4 +38,9 @@ class AuthController extends Controller
             'token' => $jwt,
         ]);
     }
+
+    public function user(Request $request)
+    {
+        return new UserResource($request->user()->load('roles'));
+    }
 }
