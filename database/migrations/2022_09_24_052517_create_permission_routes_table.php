@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('permission_routes', function (Blueprint $table) {
             $table->foreignId('permission_id')->constrained();
             $table->foreignId('route_id')->constrained();
+
+            $table->primary(['permission_id', 'route_id'], 'permission_routes_permission_id_route_id_primary');
+
         });
     }
 
