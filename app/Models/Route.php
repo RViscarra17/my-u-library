@@ -4,17 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Traits\HasRoles;
 
 class Route extends Model
 {
-    use HasFactory;
+    use HasFactory, HasRoles;
+
+    protected $guard_name = 'web';
 
     protected $fillable = ['name', 'uri', 'icon', 'order'];
-
-    public function permissions(): BelongsToMany
-    {
-        return $this->belongsToMany(Permission::class);
-    }
 }
