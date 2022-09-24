@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('author');
             $table->year('published_year');
             $table->foreignId('genre_id')->constrained();
+            $table->integer('stock');
             $table->timestamps();
         });
     }
