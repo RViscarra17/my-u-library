@@ -14,6 +14,10 @@ class Checkout extends Model
         'user_id', 'book_id', 'returned'
     ];
 
+    protected $attributes = [
+        'returned' => false,
+    ];
+
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class);
@@ -21,6 +25,6 @@ class Checkout extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
