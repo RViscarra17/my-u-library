@@ -7,7 +7,6 @@ use App\Http\Requests\CheckoutRequest;
 use App\Http\Resources\CheckoutResponse;
 use App\Models\Book;
 use App\Models\Checkout;
-use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,11 +15,18 @@ class CheckoutController extends Controller
     public function index(CheckoutQueryRequest $request)
     {
         $user_id = $request->user_id;
+        $auth_user_id = $request->user()->id;
 
-        $checkouts = Checkout::when($user_id, function ($query, $user_id) {
-            $query->where('user_id', $user_id);
-        })
-            ->get()->load('user', 'book');
+        $checkouts = Checkout::when($request->user()->hasRole('librarian') && $user_id, function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            })
+            ->when($request->user()->hasRole('student'), function($query) use ($auth_user_id) {
+                $query->where('user_id', $auth_user_id);
+            })
+            ->orderBy('id')
+            ->get()
+            ->load('user', 'book');
+
         return \response(CheckoutResponse::collection($checkouts), Response::HTTP_OK);
     }
 
