@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
 
     Route::prefix('checkouts')->group(function() {
         Route::get('/', [CheckoutController::class, 'index']);
+        Route::post('/', [CheckoutController::class, 'store']);
     });
 
 });

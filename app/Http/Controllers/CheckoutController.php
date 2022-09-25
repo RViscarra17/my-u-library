@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CheckoutQueryRequest;
+use App\Http\Requests\CheckoutRequest;
 use App\Http\Resources\CheckoutResponse;
+use App\Models\Book;
 use App\Models\Checkout;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckoutController extends Controller
@@ -20,5 +21,25 @@ class CheckoutController extends Controller
             })
             ->get()->load('user', 'book');
         return \response(CheckoutResponse::collection($checkouts), Response::HTTP_OK);
+    }
+
+    public function store(CheckoutRequest $request)
+    {
+        $user = User::find($request->user_id);
+        $bookCount = $user->checkouts()->where('book_id', $request->book_id)->where('returned', false)->count();
+        if($bookCount > 0) {
+            return \response(['message' => 'You already checkout this book'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $book = Book::find($request->book_id);
+        if ($book->stock <= 0) {
+            return \response(['message' => 'This book doesn\'t have stock'], Response::HTTP_BAD_REQUEST);
+
+        }
+
+        $checkout = Checkout::create($request->all());
+        $book->stock -= 1;
+        $book->save();
+        return \response(new CheckoutResponse($checkout), Response::HTTP_CREATED);
     }
 }
