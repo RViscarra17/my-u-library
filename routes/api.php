@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\RouteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,5 +40,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
         Route::post('/', [CheckoutController::class, 'store']);
         Route::put('/{id}', [CheckoutController::class, 'update']);
     });
+
+    Route::get('/routes', [RouteController::class, 'index']);
 
 });
