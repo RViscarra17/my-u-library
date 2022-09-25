@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserQueryRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
     //
-    public function index(Request $request)
+    public function index(UserQueryRequest $request)
     {
-        $only_names = (null !== $request->query('only_names')) ? $request->query('only_names') : null;
+        extract($request->all());
 
         $users = User::when($only_names, function($query) {
             $query->select('id', 'first_name', 'last_name');
