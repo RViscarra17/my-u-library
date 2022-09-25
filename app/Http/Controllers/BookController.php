@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -43,5 +44,13 @@ class BookController extends Controller
         }
 
         return new BookResource($book->load('genre'));
+    }
+
+    public function store(BookRequest $request)
+    {
+        $book = Book::create($request->all());
+
+        return \response( new BookResource($book->load('genre')), Response::HTTP_CREATED);
+
     }
 }
