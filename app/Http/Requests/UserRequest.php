@@ -30,7 +30,7 @@ class UserRequest extends FormRequest
             'last_name' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed',
-            'role' => 'required|integer|exists:roles,id'
+            'role_id' => 'required|integer|exists:roles,id'
         ];
     }
 

@@ -27,9 +27,9 @@ class UserController extends Controller
 
     public function store(UserRequest $request)
     {
-        $user = User::create($request->except(['role', 'password_confirmation']));
+        $user = User::create($request->except(['role_id', 'password_confirmation']));
 
-        $user->syncRoles([$request->role]);
+        $user->syncRoles([$request->role_id]);
 
         return \response( new UserResource($user), Response::HTTP_CREATED);
     }
