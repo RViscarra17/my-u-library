@@ -17,7 +17,7 @@ class BookController extends Controller
         $genre_id = (null !== $request->query('genre_id')) && is_integer($request->query('genre_id'))  ? $request->query('genre_id') : null;
 
 
-        $books = Book::when($title, function ($query, $title) {
+        $books = Book::select('id', 'title', 'author', 'genre_id')->when($title, function ($query, $title) {
                 $query->where('title', 'ILIKE', "%{$title}%");
             })
             ->when($author, function ($query, $author) {
