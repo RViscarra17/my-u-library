@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\BookResource;
 use App\Models\Book;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,5 +30,18 @@ class BookController extends Controller
             ->orderBy('id')
             ->get();
         return \response(BookResource::collection($books), Response::HTTP_OK);
+    }
+
+    public function show($id)
+    {
+        try {
+            $book = Book::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return \response([
+                'message' => 'Book Not Found'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        return new BookResource($book->load('genre'));
     }
 }
