@@ -11,7 +11,7 @@ class RouteController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $role = $user->getRoleNames()->implode('');
+        $role = $user->getRoleNames();
         $routes = Route::role($role)->get();
         return \response($routes, Response::HTTP_OK);
     }
