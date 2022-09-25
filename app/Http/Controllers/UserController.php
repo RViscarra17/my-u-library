@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserQueryRequest;
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\RoleResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -30,5 +32,11 @@ class UserController extends Controller
         $user->syncRoles([$request->role]);
 
         return \response( new UserResource($user), Response::HTTP_CREATED);
+    }
+
+    public function indexRoles()
+    {
+        $roles = Role::all();
+        return \response(RoleResource::collection($roles), Response::HTTP_OK);
     }
 }

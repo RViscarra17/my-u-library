@@ -45,4 +45,6 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::get('/routes', [RouteController::class, 'index']);
 
     Route::get('/genres', [GenreController::class, 'index']);
+
+    Route::get('/roles', [UserController::class, 'indexRoles']);
 });
