@@ -26,7 +26,7 @@ class CheckoutController extends Controller
 
     public function store(CheckoutRequest $request)
     {
-        $user = User::find($request->user_id);
+        $user = $request->user();
         $bookCount = $user->checkouts()->where('book_id', $request->book_id)->where('returned', false)->count();
         if ($bookCount > 0) {
             return \response(['message' => 'You already checkout this book'], Response::HTTP_BAD_REQUEST);
@@ -36,6 +36,8 @@ class CheckoutController extends Controller
         if ($book->stock <= 0) {
             return \response(['message' => 'This book doesn\'t have stock'], Response::HTTP_BAD_REQUEST);
         }
+
+        $request->merge(['user_id' => $user->id]);
 
         $checkout = Checkout::create($request->all());
         $book->stock -= 1;
