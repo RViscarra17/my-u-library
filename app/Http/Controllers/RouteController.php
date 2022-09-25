@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RouteResource;
 use App\Models\Route;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,6 @@ class RouteController extends Controller
         $user = $request->user();
         $role = $user->getRoleNames();
         $routes = Route::role($role)->get();
-        return \response($routes, Response::HTTP_OK);
+        return \response(RouteResource::collection($routes), Response::HTTP_OK);
     }
 }
