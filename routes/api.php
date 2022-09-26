@@ -24,14 +24,14 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum'])->group(function() {
     Route::get('/user', [AuthController::class, 'user']);
 
-    Route::prefix('users')->group(function () {
+    Route::prefix('users')->middleware(['role:librarian'])->group(function () {
         Route::get('/', [UserController::class, 'index']);
         Route::post('/', [UserController::class, 'store']);
     });
 
     Route::prefix('books')->group(function () {
         Route::get('/', [BookController::class, 'index']);
-        Route::post('/', [BookController::class, 'store']);
+        Route::middleware(['role:librarian'])->post('/', [BookController::class, 'store']);
         Route::get('/{id}', [BookController::class, 'show']);
 
     });
@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::prefix('checkouts')->group(function() {
         Route::get('/', [CheckoutController::class, 'index']);
         Route::post('/', [CheckoutController::class, 'store']);
-        Route::put('/{id}', [CheckoutController::class, 'update']);
+        Route::middleware(['role:librarian'])->put('/{id}', [CheckoutController::class, 'update']);
     });
 
     Route::get('/routes', [RouteController::class, 'index']);
